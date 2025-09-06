@@ -39,7 +39,6 @@ func NewService(ctx context.Context, credentialsPath, tokenPath, accountEmail st
 func getClient(ctx context.Context, config *oauth2.Config, tokenPath, accountEmail string) *http.Client {
 	tok, err := tokenFromFile(tokenPath)
 	if err != nil {
-
 		tok = getTokenFromWeb(config, accountEmail)
 		saveToken(tokenPath, tok)
 	}
@@ -49,20 +48,20 @@ func getClient(ctx context.Context, config *oauth2.Config, tokenPath, accountEma
 func getTokenFromWeb(config *oauth2.Config, accountEmail string) *oauth2.Token {
 	authURL := config.AuthCodeURL("state-token", oauth2.AccessTypeOffline)
 
-	fmt.Println("Open this link then paste the redirect link here:")
+	fmt.Println("Open this link in your browser and paste the full redirect link here:")
 	fmt.Println(authURL)
 	fmt.Println()
-	fmt.Println(`Example : http://localhost/?state=state-token&code=YOURTOKENHERE&scope=https://www.googleapis.com/auth/gmail.readonly`)
+	fmt.Println(`Example: http://localhost/?state=state-token&code=YOURTOKENHERE&scope=https://www.googleapis.com/auth/gmail.readonly`)
 
 	reader := bufio.NewReader(os.Stdin)
 
 	for {
 		if accountEmail != "" {
 			fmt.Println()
-			fmt.Printf("Enter Redirect Link For Account (%s) and Press Enter:\n> ", accountEmail)
+			fmt.Printf("Enter redirect link for account (%s) and press Enter:\n> ", accountEmail)
 		} else {
 			fmt.Println()
-			fmt.Print("Enter Redirect Link:\n> ")
+			fmt.Print("Enter redirect link:\n> ")
 		}
 
 		rawInput, _ := reader.ReadString('\n')
@@ -74,23 +73,23 @@ func getTokenFromWeb(config *oauth2.Config, accountEmail string) *oauth2.Token {
 				if c := u.Query().Get("code"); c != "" {
 					code = c
 				} else {
-					fmt.Println("❌ Redirect link tidak berisi parameter 'code'. Tempel link lengkap atau masukkan kode-nya langsung.")
+					fmt.Println("Redirect link does not contain a 'code' parameter. Paste the full redirect link or enter the code directly.")
 					continue
 				}
 			} else {
-				fmt.Println("❌ URL tidak valid. Tempel link lengkap dari browser atau masukkan kode-nya langsung.")
+				fmt.Println("Invalid URL. Paste the full redirect link from your browser or enter the code directly.")
 				continue
 			}
 		}
 
 		if code == "" {
-			fmt.Println("❌ Auth code kosong. Coba lagi.")
+			fmt.Println("Auth code is empty. Please try again.")
 			continue
 		}
 
 		tok, err := config.Exchange(context.Background(), code)
 		if err != nil {
-			fmt.Printf("❌ Token exchange gagal: %v\nCoba paste ulang link/kodenya.\n", err)
+			fmt.Printf("Token exchange failed: %v\nPlease paste the redirect link/code again.\n", err)
 			continue
 		}
 		return tok
