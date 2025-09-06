@@ -1,0 +1,13 @@
+bin/
+dist/
+*.out
+.DS_Store
+.idea/
+.vscode/
+logs/*
+logs
+accounts.json
+go.sum
+configs/*
+*-token.json
+*-data.json
