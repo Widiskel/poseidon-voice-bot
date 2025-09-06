@@ -45,7 +45,7 @@ To set it up:
 5. Create **OAuth 2.0 Client ID** for a **Desktop Application**.  
 6. Download the JSON credentials file.  
 7. Rename the file to `credentials.json`.  
-8. Place it in the root of this repository.  
+8. Create `config` folder on the root of this project and paste `credentials.json` inside `config` folder.  
 9. Add your Google account as a **Test User** in OAuth Consent Screen.  
 
 ---
